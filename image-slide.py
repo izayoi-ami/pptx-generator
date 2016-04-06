@@ -7,6 +7,7 @@ TITLE_CONTENT_LAYOUT = 1
 parser = argparse.ArgumentParser("Powerpoint Generator")
 parser.add_argument("outfile")
 parser.add_argument("images", nargs="+")
+parser.add_argument("-f", "--full", action="store_true", help="Ignore aspect ratio and fill the picture to whole content container")
 args = parser.parse_args()
 files = args.images
 prs = Presentation()
@@ -24,6 +25,8 @@ get_dim = lambda x:{
         }
 title_dim = get_dim(title)
 content_dim = get_dim(content)
+if not args.full:
+    content_dim.pop("height", None)
         
 for f in files:
     slide_layout = prs.slide_layouts[TITLE_CONTENT_LAYOUT]
