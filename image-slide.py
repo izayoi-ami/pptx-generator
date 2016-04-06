@@ -1,14 +1,14 @@
 from pptx import Presentation
 import argparse
-import glob
+import os 
 
 BLANK_LAYOUT = 0
 TITLE_CONTENT_LAYOUT = 1
 parser = argparse.ArgumentParser("Powerpoint Generator")
-parser.add_argument("images")
 parser.add_argument("outfile")
+parser.add_argument("images", nargs="+")
 args = parser.parse_args()
-files = glob.glob(args.images)
+files = args.images
 prs = Presentation()
 tsl = prs.slide_layouts[TITLE_CONTENT_LAYOUT]
 first_slide = prs.slides.add_slide(tsl)
@@ -29,7 +29,7 @@ for f in files:
     slide_layout = prs.slide_layouts[TITLE_CONTENT_LAYOUT]
     slide = prs.slides.add_slide(slide_layout)
     title = slide.shapes.title
-    title.text = f 
+    title.text = os.path.basename(f)
     #title = slide.shapes.add_textbox(**title_dim)
     #title.text = f
     slide.shapes.add_picture(f,**content_dim)
